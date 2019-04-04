@@ -105,10 +105,13 @@ pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
+mvnw.cmd
+mvnw
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
+
 
 # End of https://www.gitignore.io/api/java,maven,eclipse,java-web
