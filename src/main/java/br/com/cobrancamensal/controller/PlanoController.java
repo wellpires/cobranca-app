@@ -13,31 +13,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.cobrancamensal.controller.resource.ClienteResource;
-import br.com.cobrancamensal.dto.ClienteDTO;
-import br.com.cobrancamensal.dto.ClientesDTO;
-import br.com.cobrancamensal.dto.NovoClienteDTO;
-import br.com.cobrancamensal.service.ClienteService;
+import br.com.cobrancamensal.controller.resource.PlanoResource;
+import br.com.cobrancamensal.dto.NovoPlanoDTO;
+import br.com.cobrancamensal.dto.PlanoDTO;
+import br.com.cobrancamensal.dto.PlanosDTO;
+import br.com.cobrancamensal.service.PlanoService;
 
 @RestController
-@RequestMapping("api/v1/clientes")
-public class ClienteController implements ClienteResource {
+@RequestMapping("api/v1/planos")
+public class PlanoController implements PlanoResource {
 
 	@Autowired
-	private ClienteService clienteService;
+	private PlanoService planoService;
 
 	@Override
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Void> criarCliente(@Valid @RequestBody NovoClienteDTO novoClienteDTO) {
-		clienteService.criarCliente(novoClienteDTO);
+	public ResponseEntity<Void> criarPlano(@Valid @RequestBody NovoPlanoDTO novoPlanoDTO) {
+		planoService.criarPlano(novoPlanoDTO);
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<ClientesDTO> listarClientes() {
-		List<ClienteDTO> clientes = clienteService.listarClientes();
-		return ResponseEntity.ok(new ClientesDTO(clientes));
+	public ResponseEntity<PlanosDTO> listarPlanos() {
+		List<PlanoDTO> planos = planoService.listarPlanos();
+		return ResponseEntity.ok(new PlanosDTO(planos));
 	}
 
 }
