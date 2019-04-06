@@ -5,32 +5,35 @@ import java.time.LocalDate;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import br.com.caelum.stella.bean.validation.CPF;
-import br.com.cobrancamensal.annotation.SexoValidation;
+import br.com.cobrancamensal.annotation.EstadoCivil;
 import br.com.cobrancamensal.util.JSONLocalDateDeserialize;
+import br.com.cobrancamensal.util.JSONLocalDateSerialize;
 
 public class NovoClienteDTO {
 
 	@NotBlank(message = "Nome do cliente é obrigatório!")
-	private String nomeCliente;
+	private String nome;
 
 	@JsonDeserialize(using = JSONLocalDateDeserialize.class)
+	@JsonSerialize(using = JSONLocalDateSerialize.class)
 	private LocalDate dataNascimento;
 
 	@NotBlank(message = "CPF é obrigatório!")
 	@CPF(formatted = false, message = "CPF Inválido!")
 	private String cpf;
 
-	@SexoValidation(message = "Sexo inválido!")
-	private String sexo;
+	@EstadoCivil(message = "Estado civil inválido!")
+	private String estadoCivil;
 
-	public String getNomeCliente() {
-		return nomeCliente;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setNomeCliente(String nomeCliente) {
-		this.nomeCliente = nomeCliente;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public LocalDate getDataNascimento() {
@@ -49,12 +52,12 @@ public class NovoClienteDTO {
 		this.cpf = cpf;
 	}
 
-	public String getSexo() {
-		return sexo;
+	public String getEstadoCivil() {
+		return this.estadoCivil;
 	}
 
-	public void setSexo(String sexo) {
-		this.sexo = sexo;
+	public void setEstadoCivil(String estadoCivil) {
+		this.estadoCivil = estadoCivil;
 	}
 
 }

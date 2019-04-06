@@ -10,12 +10,12 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import br.com.cobrancamensal.validator.SexoValidatorCustom;
+import br.com.cobrancamensal.validator.EstadoCivilValidator;
 
 @Retention(RUNTIME)
 @Target({ FIELD, METHOD })
-@Constraint(validatedBy = SexoValidatorCustom.class)
-public @interface SexoValidation {
+@Constraint(validatedBy = EstadoCivilValidator.class)
+public @interface EstadoCivil {
 	String message();
 
 	Class<?>[] groups() default {};

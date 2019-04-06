@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.cobrancamensal.enums.Sexo;
+import br.com.cobrancamensal.enums.EstadoCivil;
 
 @Entity
 @Table(name = "CLIENTES")
@@ -37,9 +37,9 @@ public class Cliente implements Serializable {
 	@Column(name = "CPF", nullable = false)
 	private Long cpf;
 
-	@Column(name = "SEXO")
+	@Column(name = "ESTADO_CIVIL")
 	@Enumerated(EnumType.STRING)
-	private Sexo sexo;
+	private EstadoCivil estadoCivil;
 
 	public Long getIdCliente() {
 		return idCliente;
@@ -73,12 +73,12 @@ public class Cliente implements Serializable {
 		this.cpf = cpf;
 	}
 
-	public Sexo getSexo() {
-		return sexo;
+	public EstadoCivil getEstadoCivil() {
+		return estadoCivil;
 	}
 
-	public void setSexo(Sexo sexo) {
-		this.sexo = sexo;
+	public void setEstadoCivil(EstadoCivil estadoCivil) {
+		this.estadoCivil = estadoCivil;
 	}
 
 }
