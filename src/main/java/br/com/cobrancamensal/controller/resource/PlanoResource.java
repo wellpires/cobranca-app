@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
 import br.com.cobrancamensal.dto.PlanosDTO;
+import br.com.cobrancamensal.exception.PlanoAlreadyExistsException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -16,7 +17,7 @@ public interface PlanoResource {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request"),
 			@ApiResponse(code = 404, message = "Not Found"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
-	ResponseEntity<Void> criarPlano(NovoPlanoDTO novoPlanoDTO);
+	ResponseEntity<Void> criarPlano(NovoPlanoDTO novoPlanoDTO) throws PlanoAlreadyExistsException;
 
 	@ApiOperation(value = "Listar planos")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = PlanosDTO.class),

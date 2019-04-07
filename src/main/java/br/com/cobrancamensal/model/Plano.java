@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -16,22 +14,17 @@ public class Plano implements Serializable {
 	private static final long serialVersionUID = 9154646545393470236L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID_PLANO")
-	private Long idPlano;
-
-	@Column(name = "NOME_PLANO", length = 40)
+	@Column(name = "NOME_PLANO", length = 40, nullable = false)
 	private String nomePlano;
 
-	@Column(name = "VALOR")
+	@Column(name = "VALOR", nullable = false)
 	private Double valor;
 
-	public Long getIdPlano() {
-		return idPlano;
+	public Plano() {
 	}
 
-	public void setIdPlano(Long idPlano) {
-		this.idPlano = idPlano;
+	public Plano(String nomePlano) {
+		this.nomePlano = nomePlano;
 	}
 
 	public String getNomePlano() {

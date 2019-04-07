@@ -15,12 +15,20 @@ public class ContratoPK implements Serializable {
 	private static final long serialVersionUID = -7724317796561762562L;
 
 	@ManyToOne
-	@JoinColumn(name = "ID_CLIENTE")
+	@JoinColumn(name = "CPF")
 	private Cliente cliente;
 
 	@ManyToOne
-	@JoinColumn(name = "ID_PLANO")
+	@JoinColumn(name = "NOME_PLANO")
 	private Plano plano;
+
+	public ContratoPK(String cpf, String nomePlano) {
+		this.cliente = new Cliente(Long.valueOf(cpf));
+		this.plano = new Plano(nomePlano);
+	}
+
+	public ContratoPK() {
+	}
 
 	public Cliente getCliente() {
 		return cliente;

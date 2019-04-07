@@ -21,7 +21,7 @@ public class Contrato implements Serializable {
 	@EmbeddedId
 	private ContratoPK idContrato;
 
-	@Column(name = "DT_CONTRATACAO")
+	@Column(name = "DT_CONTRATACAO", updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataContratacao;
 

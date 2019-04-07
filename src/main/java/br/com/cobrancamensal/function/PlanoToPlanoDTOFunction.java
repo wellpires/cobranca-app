@@ -10,7 +10,7 @@ public class PlanoToPlanoDTOFunction implements Function<Plano, PlanoDTO> {
 
 	@Override
 	public PlanoDTO apply(Plano plano) {
-		return new PlanoDTOBuilder().id(plano.getIdPlano()).nome(plano.getNomePlano()).build();
+		return new PlanoDTOBuilder().nome(plano.getNomePlano()).build();
 	}
 
 }

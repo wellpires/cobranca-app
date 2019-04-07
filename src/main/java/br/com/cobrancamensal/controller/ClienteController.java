@@ -17,6 +17,7 @@ import br.com.cobrancamensal.controller.resource.ClienteResource;
 import br.com.cobrancamensal.dto.ClienteDTO;
 import br.com.cobrancamensal.dto.ClientesDTO;
 import br.com.cobrancamensal.dto.NovoClienteDTO;
+import br.com.cobrancamensal.exception.ClienteAlreadyExistsException;
 import br.com.cobrancamensal.service.ClienteService;
 
 @RestController
@@ -28,7 +29,7 @@ public class ClienteController implements ClienteResource {
 
 	@Override
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Void> criarCliente(@Valid @RequestBody NovoClienteDTO novoClienteDTO) {
+	public ResponseEntity<Void> criarCliente(@Valid @RequestBody NovoClienteDTO novoClienteDTO) throws ClienteAlreadyExistsException {
 		clienteService.criarCliente(novoClienteDTO);
 		return ResponseEntity.noContent().build();
 	}

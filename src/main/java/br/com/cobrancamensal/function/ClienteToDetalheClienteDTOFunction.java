@@ -10,8 +10,7 @@ public class ClienteToDetalheClienteDTOFunction implements Function<Cliente, Cli
 
 	@Override
 	public ClienteDTO apply(Cliente cliente) {
-		return new ClienteDTOBuilder().id(cliente.getIdCliente()).nomeCliente(cliente.getNomeCliente())
-				.cpf(cliente.getCpf()).build();
+		return new ClienteDTOBuilder().nomeCliente(cliente.getNomeCliente()).cpf(cliente.getCpf()).build();
 	}
 
 }

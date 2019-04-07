@@ -17,6 +17,7 @@ import br.com.cobrancamensal.controller.resource.PlanoResource;
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
 import br.com.cobrancamensal.dto.PlanoDTO;
 import br.com.cobrancamensal.dto.PlanosDTO;
+import br.com.cobrancamensal.exception.PlanoAlreadyExistsException;
 import br.com.cobrancamensal.service.PlanoService;
 
 @RestController
@@ -28,7 +29,8 @@ public class PlanoController implements PlanoResource {
 
 	@Override
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Void> criarPlano(@Valid @RequestBody NovoPlanoDTO novoPlanoDTO) {
+	public ResponseEntity<Void> criarPlano(@Valid @RequestBody NovoPlanoDTO novoPlanoDTO)
+			throws PlanoAlreadyExistsException {
 		planoService.criarPlano(novoPlanoDTO);
 		return ResponseEntity.noContent().build();
 	}

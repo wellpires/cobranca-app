@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 
 import br.com.cobrancamensal.dto.ClientesDTO;
 import br.com.cobrancamensal.dto.NovoClienteDTO;
+import br.com.cobrancamensal.exception.ClienteAlreadyExistsException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -16,7 +17,7 @@ public interface ClienteResource {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request"),
 			@ApiResponse(code = 404, message = "Not Found"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
-	ResponseEntity<Void> criarCliente(NovoClienteDTO novoClienteDTO);
+	ResponseEntity<Void> criarCliente(NovoClienteDTO novoClienteDTO) throws ClienteAlreadyExistsException;
 
 	@ApiOperation(value = "Listar clientes")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ClientesDTO.class),

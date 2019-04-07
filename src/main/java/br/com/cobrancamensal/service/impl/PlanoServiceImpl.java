@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.cobrancamensal.builder.PlanoBuilder;
+import br.com.cobrancamensal.builder.PlanoDTOBuilder;
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
 import br.com.cobrancamensal.dto.PlanoDTO;
+import br.com.cobrancamensal.exception.PlanoAlreadyExistsException;
+import br.com.cobrancamensal.exception.PlanoNotFoundException;
 import br.com.cobrancamensal.function.PlanoToPlanoDTOFunction;
 import br.com.cobrancamensal.model.Plano;
 import br.com.cobrancamensal.repository.PlanoRepository;
@@ -23,7 +26,12 @@ public class PlanoServiceImpl implements PlanoService {
 	private PlanoRepository planoRepository;
 
 	@Override
-	public void criarPlano(NovoPlanoDTO novoPlanoDTO) {
+	public void criarPlano(NovoPlanoDTO novoPlanoDTO) throws PlanoAlreadyExistsException {
+
+		if (planoRepository.existsById(novoPlanoDTO.getNome())) {
+			throw new PlanoAlreadyExistsException();
+		}
+
 		Plano plano = new PlanoBuilder().nomePlano(novoPlanoDTO.getNome()).valor(novoPlanoDTO.getValor()).build();
 		planoRepository.save(plano);
 	}
@@ -33,6 +41,12 @@ public class PlanoServiceImpl implements PlanoService {
 		List<Plano> planos = new ArrayList<>();
 		CollectionUtils.addAll(planos, planoRepository.findAll().iterator());
 		return planos.stream().map(new PlanoToPlanoDTOFunction()).collect(Collectors.toList());
+	}
+
+	@Override
+	public PlanoDTO buscarPlano(String nomePlano) throws PlanoNotFoundException {
+		Plano plano = planoRepository.findByNomePlano(nomePlano).orElseThrow(PlanoNotFoundException::new);
+		return new PlanoDTOBuilder().nome(plano.getNomePlano()).build();
 	}
 
 }

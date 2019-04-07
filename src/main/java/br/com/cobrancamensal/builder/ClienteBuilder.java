@@ -11,15 +11,14 @@ import br.com.cobrancamensal.util.CobrancaUtil;
 
 public class ClienteBuilder {
 
-	private Long idCliente;
+	private Long cpf;
 	private String nomeCliente;
 	private Date dataNascimento;
-	private Long cpf;
 	private EstadoCivil estadoCivil;
 	private Integer quantidadeItens;
 
-	public ClienteBuilder idCliente(Long idCliente) {
-		this.idCliente = idCliente;
+	public ClienteBuilder cpf(String cpf) {
+		this.cpf = Long.valueOf(cpf);
 		return this;
 	}
 
@@ -30,11 +29,6 @@ public class ClienteBuilder {
 
 	public ClienteBuilder dataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = CobrancaUtil.localDateToDate(dataNascimento);
-		return this;
-	}
-
-	public ClienteBuilder cpf(String cpf) {
-		this.cpf = Long.valueOf(cpf);
 		return this;
 	}
 
@@ -50,10 +44,9 @@ public class ClienteBuilder {
 
 	public Cliente build() {
 		Cliente cliente = new Cliente();
-		cliente.setIdCliente(idCliente);
+		cliente.setCpf(cpf);
 		cliente.setNomeCliente(nomeCliente);
 		cliente.setDataNascimento(dataNascimento);
-		cliente.setCpf(cpf);
 		cliente.setEstadoCivil(estadoCivil);
 		return cliente;
 	}

@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import br.com.cobrancamensal.builder.PlanoBuilder;
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
 import br.com.cobrancamensal.dto.PlanoDTO;
+import br.com.cobrancamensal.exception.PlanoAlreadyExistsException;
 import br.com.cobrancamensal.model.Plano;
 import br.com.cobrancamensal.repository.PlanoRepository;
 import br.com.cobrancamensal.service.PlanoService;
@@ -53,7 +54,7 @@ public class PlanoServiceImplTest {
 	}
 
 	@Test
-	public void deveCriarPlano() {
+	public void deveCriarPlano() throws PlanoAlreadyExistsException {
 		planoService.criarPlano(new NovoPlanoDTO());
 		verify(planoRepository, only()).save(any(Plano.class));
 	}
