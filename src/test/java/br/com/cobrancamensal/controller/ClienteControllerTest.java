@@ -33,7 +33,9 @@ import br.com.cobrancamensal.dto.ClienteDTO;
 import br.com.cobrancamensal.dto.ClientesDTO;
 import br.com.cobrancamensal.dto.NovoClienteDTO;
 import br.com.cobrancamensal.enums.EstadoCivil;
+import br.com.cobrancamensal.response.ErrorResponse;
 import br.com.cobrancamensal.service.ClienteService;
+import br.com.cobrancamensal.util.Constantes;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ClienteControllerTest {
@@ -67,7 +69,7 @@ public class ClienteControllerTest {
 				.content(mapper.writeValueAsString(novoClienteDTO))).andDo(print()).andReturn();
 
 		assertThat("Deve criar cliente", HttpStatus.valueOf(response.getResponse().getStatus()),
-				equalTo(HttpStatus.OK));
+				equalTo(HttpStatus.NO_CONTENT));
 
 	}
 
@@ -79,6 +81,10 @@ public class ClienteControllerTest {
 		MvcResult response = mockMVC.perform(post(PATH_APP).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(mapper.writeValueAsString(novoClienteDTO))).andDo(print()).andReturn();
 
+		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
+				ErrorResponse.class);
+		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
+				equalTo(Constantes.CAMPO_NOME_CLIENTE_OBRIGATORIO));
 		assertThat("Não deve criar cliente por falta do nome do cliente",
 				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.BAD_REQUEST));
 
@@ -92,6 +98,10 @@ public class ClienteControllerTest {
 		MvcResult response = mockMVC.perform(post(PATH_APP).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(mapper.writeValueAsString(novoClienteDTO))).andDo(print()).andReturn();
 
+		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
+				ErrorResponse.class);
+		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
+				equalTo(Constantes.CAMPO_CPF_OBRIGATORIO));
 		assertThat("Não deve criar cliente por falta do CPF", HttpStatus.valueOf(response.getResponse().getStatus()),
 				equalTo(HttpStatus.BAD_REQUEST));
 
@@ -105,21 +115,29 @@ public class ClienteControllerTest {
 		MvcResult response = mockMVC.perform(post(PATH_APP).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(mapper.writeValueAsString(novoClienteDTO))).andDo(print()).andReturn();
 
+		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
+				ErrorResponse.class);
+		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
+				equalTo(Constantes.CAMPO_CPF_INVALIDO));
 		assertThat("Não deve criar cliente com CPF inválido", HttpStatus.valueOf(response.getResponse().getStatus()),
 				equalTo(HttpStatus.BAD_REQUEST));
 
 	}
 
 	@Test
-	public void naoDeveCriarClientePoisSexoInvalido() throws Exception {
+	public void naoDeveCriarClientePoisEstadoCivilInvalido() throws Exception {
 
-		NovoClienteDTO novoClienteDTO = new NovoClienteDTOBuilder().nomeCliente("Cliente teste").cpf("1234")
+		NovoClienteDTO novoClienteDTO = new NovoClienteDTOBuilder().nomeCliente("Cliente teste").cpf("08459938018")
 				.dataNascimento(LocalDate.now()).estadoCivil("K").build();
 		MvcResult response = mockMVC.perform(post(PATH_APP).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(mapper.writeValueAsString(novoClienteDTO))).andDo(print()).andReturn();
 
-		assertThat("Não deve criar cliente com Sexo inválido", HttpStatus.valueOf(response.getResponse().getStatus()),
-				equalTo(HttpStatus.BAD_REQUEST));
+		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
+				ErrorResponse.class);
+		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
+				equalTo(Constantes.CAMPO_ESTADO_CIVIL_INVALIDO));
+		assertThat("Não deve criar cliente com Estado civil inválido",
+				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.BAD_REQUEST));
 
 	}
 

@@ -20,7 +20,7 @@ public class Plano implements Serializable {
 	@Column(name = "ID_PLANO")
 	private Long idPlano;
 
-	@Column(name = "NOME_PLANO")
+	@Column(name = "NOME_PLANO", length = 40)
 	private String nomePlano;
 
 	@Column(name = "VALOR")
