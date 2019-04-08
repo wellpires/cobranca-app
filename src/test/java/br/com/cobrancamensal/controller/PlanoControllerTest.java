@@ -4,7 +4,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -30,6 +32,7 @@ import br.com.cobrancamensal.builder.PlanoDTOBuilder;
 import br.com.cobrancamensal.controller.advice.CobrancaControllerAdvice;
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
 import br.com.cobrancamensal.dto.PlanosDTO;
+import br.com.cobrancamensal.exception.PlanoAlreadyExistsException;
 import br.com.cobrancamensal.response.ErrorResponse;
 import br.com.cobrancamensal.service.PlanoService;
 import br.com.cobrancamensal.util.Constantes;
@@ -72,6 +75,19 @@ public class PlanoControllerTest {
 	}
 
 	@Test
+	public void naoDeveCriarPlanoPoisJaExiste() throws Exception {
+
+		doThrow(PlanoAlreadyExistsException.class).when(planoService).criarPlano(any(NovoPlanoDTO.class));
+
+		NovoPlanoDTO novoPlanoDTO = new NovoPlanoDTOBuilder().nome("Plano teste").valor(20.0).build();
+		MvcResult response = this.mockMVC.perform(post(PATH_APP).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(mapper.writeValueAsString(novoPlanoDTO))).andDo(print()).andReturn();
+		assertThat("Não deve criar o plano pois já existe", HttpStatus.valueOf(response.getResponse().getStatus()),
+				equalTo(HttpStatus.CONFLICT));
+
+	}
+
+	@Test
 	public void naoDeveCriarPlanoComNomeVazioOuNulo() throws Exception {
 
 		NovoPlanoDTO novoPlanoDTO = new NovoPlanoDTOBuilder().valor(20.0).build();
@@ -82,8 +98,8 @@ public class PlanoControllerTest {
 				ErrorResponse.class);
 		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
 				equalTo(Constantes.CAMPO_NOME_PLANO_OBRIGATORIO));
-		assertThat("Não deve criar o plano pois está faltando o nome", response.getResponse().getStatus(),
-				equalTo(HttpStatus.BAD_REQUEST.value()));
+		assertThat("Não deve criar o plano pois está faltando o nome",
+				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.BAD_REQUEST));
 
 	}
 
@@ -94,13 +110,13 @@ public class PlanoControllerTest {
 				.build();
 		MvcResult response = this.mockMVC.perform(post(PATH_APP).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(mapper.writeValueAsString(novoPlanoDTO))).andDo(print()).andReturn();
-		
+
 		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
 				ErrorResponse.class);
 		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
 				equalTo(Constantes.CAMPO_NOME_PLANO_TAMANHO_MAXIMO));
-		assertThat("Não deve criar o plano pois o nome está muito grande", response.getResponse().getStatus(),
-				equalTo(HttpStatus.BAD_REQUEST.value()));
+		assertThat("Não deve criar o plano pois o nome está muito grande",
+				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.BAD_REQUEST));
 
 	}
 
@@ -110,13 +126,13 @@ public class PlanoControllerTest {
 		NovoPlanoDTO novoPlanoDTO = new NovoPlanoDTOBuilder().nome("Plano teste").build();
 		MvcResult response = this.mockMVC.perform(post(PATH_APP).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(mapper.writeValueAsString(novoPlanoDTO))).andDo(print()).andReturn();
-		
+
 		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
 				ErrorResponse.class);
 		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
 				equalTo(Constantes.CAMPO_VALOR_OBRIGATORIO));
-		assertThat("Não deve criar o plano pois está faltando o valor", response.getResponse().getStatus(),
-				equalTo(HttpStatus.BAD_REQUEST.value()));
+		assertThat("Não deve criar o plano pois está faltando o valor",
+				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.BAD_REQUEST));
 
 	}
 
@@ -126,13 +142,13 @@ public class PlanoControllerTest {
 		NovoPlanoDTO novoPlanoDTO = new NovoPlanoDTOBuilder().nome("Plano teste").valor(12345.00).build();
 		MvcResult response = this.mockMVC.perform(post(PATH_APP).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(mapper.writeValueAsString(novoPlanoDTO))).andDo(print()).andReturn();
-		
+
 		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
 				ErrorResponse.class);
 		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
 				equalTo(Constantes.CAMPO_VALOR_MAXIMO));
-		assertThat("Não deve criar o plano pois o valor está muito alto", response.getResponse().getStatus(),
-				equalTo(HttpStatus.BAD_REQUEST.value()));
+		assertThat("Não deve criar o plano pois o valor está muito alto",
+				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.BAD_REQUEST));
 
 	}
 

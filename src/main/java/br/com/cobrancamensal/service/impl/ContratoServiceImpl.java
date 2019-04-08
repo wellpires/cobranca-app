@@ -30,15 +30,16 @@ public class ContratoServiceImpl implements ContratoService {
 	private PlanoService planoService;
 
 	@Override
-	public void contratarPlano(Long cpf, String nomePlano) throws ClienteNotFoundException, PlanoNotFoundException, ContratoAlreadyExistsException {
+	public void contratarPlano(Long cpf, String nomePlano)
+			throws ClienteNotFoundException, PlanoNotFoundException, ContratoAlreadyExistsException {
 		ClienteDTO clienteDTO = clienteService.buscarCliente(cpf);
 		PlanoDTO planoDTO = planoService.buscarPlano(nomePlano);
 		ContratoPK idContrato = new ContratoPK(clienteDTO.getCpf(), planoDTO.getNome());
 
-		if(contratoRepository.existsById(idContrato)) {
+		if (contratoRepository.existsById(idContrato)) {
 			throw new ContratoAlreadyExistsException(clienteDTO.getCpf(), planoDTO.getNome());
 		}
-		
+
 		Contrato contrato = new Contrato();
 		contrato.setIdContrato(idContrato);
 		contrato.setDataContratacao(new Date());

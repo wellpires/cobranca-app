@@ -3,7 +3,9 @@ package br.com.cobrancamensal.controller;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,6 +35,7 @@ import br.com.cobrancamensal.dto.ClienteDTO;
 import br.com.cobrancamensal.dto.ClientesDTO;
 import br.com.cobrancamensal.dto.NovoClienteDTO;
 import br.com.cobrancamensal.enums.EstadoCivil;
+import br.com.cobrancamensal.exception.ClienteAlreadyExistsException;
 import br.com.cobrancamensal.response.ErrorResponse;
 import br.com.cobrancamensal.service.ClienteService;
 import br.com.cobrancamensal.util.Constantes;
@@ -70,6 +73,21 @@ public class ClienteControllerTest {
 
 		assertThat("Deve criar cliente", HttpStatus.valueOf(response.getResponse().getStatus()),
 				equalTo(HttpStatus.NO_CONTENT));
+
+	}
+
+	@Test
+	public void naoDeveCriarClientePoisJaExiste() throws Exception {
+
+		doThrow(ClienteAlreadyExistsException.class).when(clienteService).criarCliente(any(NovoClienteDTO.class));
+
+		NovoClienteDTO novoClienteDTO = new NovoClienteDTOBuilder().nomeCliente("Cliente teste")
+				.dataNascimento(LocalDate.now()).cpf("08459938018").estadoCivil(EstadoCivil.Casado.name()).build();
+		MvcResult response = mockMVC.perform(post(PATH_APP).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(mapper.writeValueAsString(novoClienteDTO))).andDo(print()).andReturn();
+
+		assertThat("Não deve criar cliente pois já existe", HttpStatus.valueOf(response.getResponse().getStatus()),
+				equalTo(HttpStatus.CONFLICT));
 
 	}
 
