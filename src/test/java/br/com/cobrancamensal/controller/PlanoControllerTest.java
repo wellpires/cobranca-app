@@ -32,7 +32,7 @@ import br.com.cobrancamensal.builder.PlanoDTOBuilder;
 import br.com.cobrancamensal.controller.advice.CobrancaControllerAdvice;
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
 import br.com.cobrancamensal.dto.PlanosDTO;
-import br.com.cobrancamensal.exception.PlanoAlreadyExistsException;
+import br.com.cobrancamensal.exception.PlanoDuplicadoException;
 import br.com.cobrancamensal.response.ErrorResponse;
 import br.com.cobrancamensal.service.PlanoService;
 import br.com.cobrancamensal.util.Constantes;
@@ -77,7 +77,7 @@ public class PlanoControllerTest {
 	@Test
 	public void naoDeveCriarPlanoPoisJaExiste() throws Exception {
 
-		doThrow(PlanoAlreadyExistsException.class).when(planoService).criarPlano(any(NovoPlanoDTO.class));
+		doThrow(PlanoDuplicadoException.class).when(planoService).criarPlano(any(NovoPlanoDTO.class));
 
 		NovoPlanoDTO novoPlanoDTO = new NovoPlanoDTOBuilder().nome("Plano teste").valor(20.0).build();
 		MvcResult response = this.mockMVC.perform(post(PATH_APP).contentType(MediaType.APPLICATION_JSON_UTF8)

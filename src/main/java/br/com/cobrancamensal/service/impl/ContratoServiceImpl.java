@@ -5,10 +5,10 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.cobrancamensal.dto.ClienteDTO;
+import br.com.cobrancamensal.dto.DetalheClienteDTO;
 import br.com.cobrancamensal.dto.PlanoDTO;
 import br.com.cobrancamensal.exception.ClienteNotFoundException;
-import br.com.cobrancamensal.exception.ContratoAlreadyExistsException;
+import br.com.cobrancamensal.exception.ContratoDuplicadoException;
 import br.com.cobrancamensal.exception.PlanoNotFoundException;
 import br.com.cobrancamensal.model.Contrato;
 import br.com.cobrancamensal.model.pk.ContratoPK;
@@ -31,13 +31,13 @@ public class ContratoServiceImpl implements ContratoService {
 
 	@Override
 	public void contratarPlano(Long cpf, String nomePlano)
-			throws ClienteNotFoundException, PlanoNotFoundException, ContratoAlreadyExistsException {
-		ClienteDTO clienteDTO = clienteService.buscarCliente(cpf);
+			throws ClienteNotFoundException, PlanoNotFoundException, ContratoDuplicadoException {
+		DetalheClienteDTO detalheClienteDTO = clienteService.buscarCliente(cpf);
 		PlanoDTO planoDTO = planoService.buscarPlano(nomePlano);
-		ContratoPK idContrato = new ContratoPK(clienteDTO.getCpf(), planoDTO.getNome());
+		ContratoPK idContrato = new ContratoPK(detalheClienteDTO.getCpf(), planoDTO.getNome());
 
 		if (contratoRepository.existsById(idContrato)) {
-			throw new ContratoAlreadyExistsException(clienteDTO.getCpf(), planoDTO.getNome());
+			throw new ContratoDuplicadoException(detalheClienteDTO.getCpf(), planoDTO.getNome());
 		}
 
 		Contrato contrato = new Contrato();

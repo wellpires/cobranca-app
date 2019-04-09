@@ -3,7 +3,7 @@ package br.com.cobrancamensal.controller.resource;
 import org.springframework.http.ResponseEntity;
 
 import br.com.cobrancamensal.exception.ClienteNotFoundException;
-import br.com.cobrancamensal.exception.ContratoAlreadyExistsException;
+import br.com.cobrancamensal.exception.ContratoDuplicadoException;
 import br.com.cobrancamensal.exception.PlanoNotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +18,6 @@ public interface ContratoResource {
 			@ApiResponse(code = 404, message = "Not Found"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	ResponseEntity<Void> contratarPlano(String cpf, String nomePlano)
-			throws ClienteNotFoundException, PlanoNotFoundException, ContratoAlreadyExistsException;
+			throws ClienteNotFoundException, PlanoNotFoundException, ContratoDuplicadoException;
 
 }

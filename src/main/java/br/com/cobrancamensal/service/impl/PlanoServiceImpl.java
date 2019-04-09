@@ -12,7 +12,7 @@ import br.com.cobrancamensal.builder.PlanoBuilder;
 import br.com.cobrancamensal.builder.PlanoDTOBuilder;
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
 import br.com.cobrancamensal.dto.PlanoDTO;
-import br.com.cobrancamensal.exception.PlanoAlreadyExistsException;
+import br.com.cobrancamensal.exception.PlanoDuplicadoException;
 import br.com.cobrancamensal.exception.PlanoNotFoundException;
 import br.com.cobrancamensal.function.PlanoToPlanoDTOFunction;
 import br.com.cobrancamensal.model.Plano;
@@ -26,10 +26,10 @@ public class PlanoServiceImpl implements PlanoService {
 	private PlanoRepository planoRepository;
 
 	@Override
-	public void criarPlano(NovoPlanoDTO novoPlanoDTO) throws PlanoAlreadyExistsException {
+	public void criarPlano(NovoPlanoDTO novoPlanoDTO) throws PlanoDuplicadoException {
 
 		if (planoRepository.existsById(novoPlanoDTO.getNome())) {
-			throw new PlanoAlreadyExistsException();
+			throw new PlanoDuplicadoException();
 		}
 
 		Plano plano = new PlanoBuilder().nomePlano(novoPlanoDTO.getNome()).valor(novoPlanoDTO.getValor()).build();

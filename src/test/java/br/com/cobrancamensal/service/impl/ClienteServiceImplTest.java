@@ -26,12 +26,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import br.com.cobrancamensal.builder.AlterarClienteDTOBuilder;
 import br.com.cobrancamensal.builder.ClienteBuilder;
 import br.com.cobrancamensal.builder.NovoClienteDTOBuilder;
 import br.com.cobrancamensal.dto.ClienteDTO;
+import br.com.cobrancamensal.dto.DetalheClienteDTO;
 import br.com.cobrancamensal.dto.NovoClienteDTO;
 import br.com.cobrancamensal.enums.EstadoCivil;
-import br.com.cobrancamensal.exception.ClienteAlreadyExistsException;
+import br.com.cobrancamensal.exception.ClienteDuplicadoException;
 import br.com.cobrancamensal.exception.ClienteNotFoundException;
 import br.com.cobrancamensal.model.Cliente;
 import br.com.cobrancamensal.repository.ClienteRepository;
@@ -48,7 +50,7 @@ public class ClienteServiceImplTest {
 	private ClienteService clienteService;
 
 	@Test
-	public void deveCriarCliente() throws ClienteAlreadyExistsException {
+	public void deveCriarCliente() throws ClienteDuplicadoException {
 
 		when(clienteRepository.existsById(anyLong())).thenReturn(Boolean.FALSE);
 
@@ -59,8 +61,8 @@ public class ClienteServiceImplTest {
 
 	}
 
-	@Test(expected = ClienteAlreadyExistsException.class)
-	public void naoDeveCriarClientePoisJaFoiCriado() throws ClienteAlreadyExistsException {
+	@Test(expected = ClienteDuplicadoException.class)
+	public void naoDeveCriarClientePoisJaFoiCriado() throws ClienteDuplicadoException {
 
 		when(clienteRepository.existsById(anyLong())).thenReturn(Boolean.TRUE);
 
@@ -84,14 +86,15 @@ public class ClienteServiceImplTest {
 	@Test
 	public void deveBuscarCliente() throws ClienteNotFoundException {
 
-		Cliente cliente = new ClienteBuilder().nomeCliente("Cliente teste").cpf("12345678901").build();
+		Cliente cliente = new ClienteBuilder().nomeCliente("Cliente teste").cpf("12345678901")
+				.estadoCivil(EstadoCivil.Casado).build();
 		when(clienteRepository.findById(anyLong())).thenReturn(Optional.ofNullable(cliente));
 
-		ClienteDTO clienteDTO = clienteService.buscarCliente(10L);
+		DetalheClienteDTO detalheClienteDTO = clienteService.buscarCliente(10L);
 
-		assertNotNull("Deve retornar os dados do cliente", clienteDTO);
-		assertThat("Deve retornar o nome do cliente", clienteDTO.getNome(), equalTo(cliente.getNomeCliente()));
-		assertThat("Deve retornar o CPF do cliente", clienteDTO.getCpf(), equalTo(cliente.getCpf().toString()));
+		assertNotNull("Deve retornar os dados do cliente", detalheClienteDTO);
+		assertThat("Deve retornar o nome do cliente", detalheClienteDTO.getNome(), equalTo(cliente.getNomeCliente()));
+		assertThat("Deve retornar o CPF do cliente", detalheClienteDTO.getCpf(), equalTo(cliente.getCpf().toString()));
 
 	}
 
@@ -103,6 +106,56 @@ public class ClienteServiceImplTest {
 
 		clienteService.buscarCliente(10L);
 
+	}
+
+	@Test
+	public void deveRemoverCliente() throws ClienteNotFoundException {
+
+		Cliente cliente = new ClienteBuilder().nomeCliente("Cliente teste").cpf("12345678901")
+				.estadoCivil(EstadoCivil.Casado).build();
+		when(clienteRepository.findById(anyLong())).thenReturn(Optional.ofNullable(cliente));
+
+		clienteService.removerCliente(102L);
+
+		verify(clienteRepository, times(1)).delete(any(Cliente.class));
+
+	}
+
+	@Test(expected = ClienteNotFoundException.class)
+	public void naoDeveRemoverClientePoisNaoFoiEncontradoCliente() throws ClienteNotFoundException {
+
+		Cliente cliente = null;
+		when(clienteRepository.findById(anyLong())).thenReturn(Optional.ofNullable(cliente));
+
+		clienteService.removerCliente(102L);
+
+		verify(clienteRepository, never()).delete(any(Cliente.class));
+
+	}
+
+	@Test
+	public void deveAlterarCliente() throws ClienteNotFoundException {
+
+		Cliente cliente = new ClienteBuilder().nomeCliente("Cliente teste").cpf("12345678901")
+				.estadoCivil(EstadoCivil.Casado).build();
+		when(clienteRepository.findById(anyLong())).thenReturn(Optional.ofNullable(cliente));
+
+		clienteService.alterarCliente(102L, new AlterarClienteDTOBuilder().estadoCivil(EstadoCivil.Solteiro)
+				.dataNascimento(LocalDate.now()).build());
+
+		verify(clienteRepository, times(1)).save(any(Cliente.class));
+	}
+
+	@Test(expected = ClienteNotFoundException.class)
+	public void naoDeveAlterarClientePoisNaoFoiEncontradoCliente() throws ClienteNotFoundException {
+
+		Cliente cliente = null;
+		when(clienteRepository.findById(anyLong())).thenReturn(Optional.ofNullable(cliente));
+
+		clienteService.alterarCliente(102L, new AlterarClienteDTOBuilder().estadoCivil(EstadoCivil.Solteiro)
+				.dataNascimento(LocalDate.now()).build());
+
+		verify(clienteRepository, never()).save(any(Cliente.class));
 	}
 
 	@After

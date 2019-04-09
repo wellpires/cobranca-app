@@ -6,10 +6,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import br.com.cobrancamensal.exception.ClienteAlreadyExistsException;
+import br.com.cobrancamensal.exception.ClienteDuplicadoException;
 import br.com.cobrancamensal.exception.ClienteNotFoundException;
-import br.com.cobrancamensal.exception.ContratoAlreadyExistsException;
-import br.com.cobrancamensal.exception.PlanoAlreadyExistsException;
+import br.com.cobrancamensal.exception.ContratoDuplicadoException;
+import br.com.cobrancamensal.exception.PlanoDuplicadoException;
 import br.com.cobrancamensal.exception.PlanoNotFoundException;
 import br.com.cobrancamensal.response.ErrorResponse;
 
@@ -40,25 +40,24 @@ public class CobrancaControllerAdvice {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(planoNotFoundException.getMessage()));
 	}
 
-	@ExceptionHandler(PlanoAlreadyExistsException.class)
-	public ResponseEntity<ErrorResponse> handlePlanoAlreadyExistsException(
-			PlanoAlreadyExistsException planoAlreadyExistsException) {
-		return ResponseEntity.status(HttpStatus.CONFLICT)
-				.body(new ErrorResponse(planoAlreadyExistsException.getMessage()));
+	@ExceptionHandler(PlanoDuplicadoException.class)
+	public ResponseEntity<ErrorResponse> handlePlanoDuplicadoException(
+			PlanoDuplicadoException planoDuplicadoException) {
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(planoDuplicadoException.getMessage()));
 	}
 
-	@ExceptionHandler(ClienteAlreadyExistsException.class)
-	public ResponseEntity<ErrorResponse> handleClienteAlreadyExistsException(
-			ClienteAlreadyExistsException clienteAlreadyExistsException) {
+	@ExceptionHandler(ClienteDuplicadoException.class)
+	public ResponseEntity<ErrorResponse> handleClienteDuplicadoException(
+			ClienteDuplicadoException clienteDuplicadoException) {
 		return ResponseEntity.status(HttpStatus.CONFLICT)
-				.body(new ErrorResponse(clienteAlreadyExistsException.getMessage()));
+				.body(new ErrorResponse(clienteDuplicadoException.getMessage()));
 	}
 
-	@ExceptionHandler(ContratoAlreadyExistsException.class)
-	public ResponseEntity<ErrorResponse> handleContratoAlreadyExistsException(
-			ContratoAlreadyExistsException contratoAlreadyExistsException) {
+	@ExceptionHandler(ContratoDuplicadoException.class)
+	public ResponseEntity<ErrorResponse> handleContratoDuplicadoException(
+			ContratoDuplicadoException contratoDuplicadoException) {
 		return ResponseEntity.status(HttpStatus.CONFLICT)
-				.body(new ErrorResponse(contratoAlreadyExistsException.getMessage()));
+				.body(new ErrorResponse(contratoDuplicadoException.getMessage()));
 	}
 
 }

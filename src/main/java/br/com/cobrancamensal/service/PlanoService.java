@@ -4,12 +4,12 @@ import java.util.List;
 
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
 import br.com.cobrancamensal.dto.PlanoDTO;
-import br.com.cobrancamensal.exception.PlanoAlreadyExistsException;
+import br.com.cobrancamensal.exception.PlanoDuplicadoException;
 import br.com.cobrancamensal.exception.PlanoNotFoundException;
 
 public interface PlanoService {
 
-	void criarPlano(NovoPlanoDTO novoPlanoDTO) throws PlanoAlreadyExistsException;
+	void criarPlano(NovoPlanoDTO novoPlanoDTO) throws PlanoDuplicadoException;
 
 	List<PlanoDTO> listarPlanos();
 

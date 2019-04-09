@@ -1,15 +1,17 @@
-package br.com.cobrancamensal.dto;
+package br.com.cobrancamensal.response;
 
 import java.util.List;
 
-public class ClientesDTO {
+import br.com.cobrancamensal.dto.ClienteDTO;
+
+public class ClientesResponse {
 
 	private List<ClienteDTO> clientes;
 
-	public ClientesDTO() {
+	public ClientesResponse() {
 	}
 
-	public ClientesDTO(List<ClienteDTO> clientes) {
+	public ClientesResponse(List<ClienteDTO> clientes) {
 		this.clientes = clientes;
 	}
 

@@ -27,7 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.cobrancamensal.controller.advice.CobrancaControllerAdvice;
 import br.com.cobrancamensal.exception.ClienteNotFoundException;
-import br.com.cobrancamensal.exception.ContratoAlreadyExistsException;
+import br.com.cobrancamensal.exception.ContratoDuplicadoException;
 import br.com.cobrancamensal.exception.PlanoNotFoundException;
 import br.com.cobrancamensal.service.ContratoService;
 
@@ -109,7 +109,7 @@ public class ContratoControllerTest {
 	@Test
 	public void naoDeveContratarPlanoPoisOContratoJaExiste() throws Exception {
 
-		doThrow(ContratoAlreadyExistsException.class).when(contratoService).contratarPlano(anyLong(), anyString());
+		doThrow(ContratoDuplicadoException.class).when(contratoService).contratarPlano(anyLong(), anyString());
 
 		Map<String, Object> parametros = new HashMap<>();
 		parametros.put("cpf", 123456);

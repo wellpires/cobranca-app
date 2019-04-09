@@ -4,6 +4,7 @@ public class Constantes {
 
 	public static final String DATE_PATTERN_PT_BR = "dd/MM/yyyy";
 
+	public static final String CLIENTE_OBRIGATORIO = "O cliente é obrigatório!";
 	public static final String CAMPO_NOME_PLANO_OBRIGATORIO = "Nome do plano é obrigatório!";
 	public static final String CAMPO_NOME_PLANO_TAMANHO_MAXIMO = "O tamanho máximo do campo 'nome' deve ser 40 caracteres!";
 	public static final String CAMPO_VALOR_OBRIGATORIO = "O valor é obrigatório!";

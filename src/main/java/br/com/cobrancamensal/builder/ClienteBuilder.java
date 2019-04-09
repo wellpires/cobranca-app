@@ -37,6 +37,11 @@ public class ClienteBuilder {
 		return this;
 	}
 
+	public ClienteBuilder estadoCivil(EstadoCivil estadoCivil) {
+		this.estadoCivil = estadoCivil;
+		return this;
+	}
+
 	public ClienteBuilder quantidadeItens(Integer quantidadeItens) {
 		this.quantidadeItens = quantidadeItens;
 		return this;
