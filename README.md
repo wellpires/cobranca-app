@@ -14,7 +14,8 @@
 # Arquitetura do projeto
 
 Ambiente de execução embutido - Utilizado o Tomcat embutido, disponibilizado pelo Spring Boot.
-REST - Esta aplicação disponibiliza um serviço REST para disponibilizar recursos de cadastro de um Cliente, Plano e Contrato, utilizado o banco de dados PostgreSQL.
+
+Esta aplicação disponibiliza um serviço REST para disponibilizar recursos de cadastro de Clientes, Planos e Contratos, utilizado o banco de dados PostgreSQL.
 
 # Pré requisitos
 1. Criar o banco de dados com o nome **db_cobranca**
