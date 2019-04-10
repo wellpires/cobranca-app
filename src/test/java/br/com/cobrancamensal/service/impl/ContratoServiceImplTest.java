@@ -1,5 +1,9 @@
 package br.com.cobrancamensal.service.impl;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -7,6 +11,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +24,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import br.com.cobrancamensal.builder.ContratoBuilder;
 import br.com.cobrancamensal.builder.DetalheClienteDTOBuilder;
 import br.com.cobrancamensal.builder.DetalhePlanoDTOBuilder;
+import br.com.cobrancamensal.dto.ContratoDTO;
 import br.com.cobrancamensal.dto.DetalheClienteDTO;
+import br.com.cobrancamensal.dto.DetalheContratoDTO;
 import br.com.cobrancamensal.dto.DetalhePlanoDTO;
 import br.com.cobrancamensal.exception.ClienteNotFoundException;
 import br.com.cobrancamensal.exception.ContratoDuplicadoException;
+import br.com.cobrancamensal.exception.ContratoNotFoundException;
 import br.com.cobrancamensal.exception.PlanoNotFoundException;
 import br.com.cobrancamensal.model.Contrato;
 import br.com.cobrancamensal.model.pk.ContratoPK;
@@ -102,6 +114,43 @@ public class ContratoServiceImplTest {
 		when(contratoRepository.existsById(any(ContratoPK.class))).thenReturn(Boolean.TRUE);
 
 		contratoService.contratarPlano(12345678901L, "Plano teste");
+
+	}
+
+	@Test
+	public void deveListarContratos() {
+
+		List<Contrato> contratos = new ContratoBuilder().quantidadeItens(10).buildList();
+		when(contratoRepository.findAll()).thenReturn(contratos);
+
+		List<ContratoDTO> contratosDTO = contratoService.listarContratos();
+
+		assertThat("Deve retornar todos os contratos", contratosDTO, hasSize(contratos.size()));
+
+	}
+
+	@Test
+	public void deveBuscarContrato() throws ContratoNotFoundException {
+
+		Contrato contrato = new ContratoBuilder().cpf(12345678901L).nomePlano("Plano teste").dataContratacao(new Date())
+				.build();
+		when(contratoRepository.findById(any(ContratoPK.class))).thenReturn(Optional.ofNullable(contrato));
+
+		DetalheContratoDTO detalheContratoDTO = contratoService.buscarContrato("1234567901", "Plano teste1");
+
+		assertNotNull("Retornar o detalhe do contrato", detalheContratoDTO);
+
+	}
+
+	@Test(expected = ContratoNotFoundException.class)
+	public void naoDeveBuscarContratoPoisNaoExiste() throws ContratoNotFoundException {
+
+		Contrato contrato = null;
+		when(contratoRepository.findById(any(ContratoPK.class))).thenReturn(Optional.ofNullable(contrato));
+
+		DetalheContratoDTO detalheContratoDTO = contratoService.buscarContrato("1234567901", "Plano teste1");
+
+		assertNull("Não deve retornar o contrato pois não existe", detalheContratoDTO);
 
 	}
 
