@@ -66,7 +66,7 @@ public class ClienteController implements ClienteResource {
 
 	@Override
 	@PatchMapping(path = "/{cpf}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Void> alterarCliente(@RequestBody AlterarClienteRequest alterarClienteRequest,
+	public ResponseEntity<Void> alterarCliente(@Valid @RequestBody AlterarClienteRequest alterarClienteRequest,
 			@PathVariable("cpf") Long cpf) throws ClienteNotFoundException {
 		clienteService.alterarCliente(cpf, alterarClienteRequest.getDetalheClienteDTO());
 		return ResponseEntity.noContent().build();

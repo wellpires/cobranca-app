@@ -15,6 +15,11 @@ public class AlterarClienteDTOBuilder {
 		return this;
 	}
 
+	public AlterarClienteDTOBuilder estadoCivil(String estadoCivil) {
+		this.estadoCivil = estadoCivil;
+		return this;
+	}
+
 	public AlterarClienteDTOBuilder dataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
 		return this;

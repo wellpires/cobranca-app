@@ -285,13 +285,52 @@ public class ClienteControllerTest {
 		variables.put("cpf", 58190950061L);
 		URI alterarCliente = UriComponentsBuilder.fromPath(PATCH_ALTERAR_CLIENTE).buildAndExpand(variables).toUri();
 
+		AlterarClienteDTO alterarClienteDTO = new AlterarClienteDTOBuilder()
+				.dataNascimento(LocalDate.now().minusYears(18)).estadoCivil(EstadoCivil.Casado).build();
 		MvcResult response = mockMVC
-				.perform(patch(alterarCliente).contentType(MediaType.APPLICATION_JSON_UTF8).content(
-						mapper.writeValueAsString(new AlterarClienteRequest(new AlterarClienteDTOBuilder().build()))))
+				.perform(patch(alterarCliente).contentType(MediaType.APPLICATION_JSON_UTF8)
+						.content(mapper.writeValueAsString(new AlterarClienteRequest(alterarClienteDTO))))
 				.andDo(print()).andReturn();
 
 		assertThat("Deve alterar cliente", HttpStatus.valueOf(response.getResponse().getStatus()),
 				equalTo(HttpStatus.NO_CONTENT));
+
+	}
+
+	@Test
+	public void naoDeveAlterarClientePoisEstadoCivilEstaInvalido() throws Exception {
+
+		HashMap<String, Object> variables = new HashMap<String, Object>();
+		variables.put("cpf", 58190950061L);
+		URI alterarCliente = UriComponentsBuilder.fromPath(PATCH_ALTERAR_CLIENTE).buildAndExpand(variables).toUri();
+
+		AlterarClienteDTO alterarClienteDTO = new AlterarClienteDTOBuilder().dataNascimento(LocalDate.now())
+				.estadoCivil("TESTE").build();
+		MvcResult response = mockMVC
+				.perform(patch(alterarCliente).contentType(MediaType.APPLICATION_JSON_UTF8)
+						.content(mapper.writeValueAsString(new AlterarClienteRequest(alterarClienteDTO))))
+				.andDo(print()).andReturn();
+
+		assertThat("Não deve alterar cliente pois o estado civil está incorreto",
+				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.BAD_REQUEST));
+
+	}
+
+	@Test
+	public void naoDeveAlterarClientePoisClienteNaoEstaNulo() throws Exception {
+
+		HashMap<String, Object> variables = new HashMap<String, Object>();
+		variables.put("cpf", 58190950061L);
+		URI alterarCliente = UriComponentsBuilder.fromPath(PATCH_ALTERAR_CLIENTE).buildAndExpand(variables).toUri();
+
+		AlterarClienteDTO alterarClienteDTO = null;
+		MvcResult response = mockMVC
+				.perform(patch(alterarCliente).contentType(MediaType.APPLICATION_JSON_UTF8)
+						.content(mapper.writeValueAsString(new AlterarClienteRequest(alterarClienteDTO))))
+				.andDo(print()).andReturn();
+
+		assertThat("Não deve alterar cliente pois o cliente está nulo",
+				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.BAD_REQUEST));
 
 	}
 
@@ -305,9 +344,12 @@ public class ClienteControllerTest {
 		variables.put("cpf", 58190950061L);
 		URI alterarCliente = UriComponentsBuilder.fromPath(PATCH_ALTERAR_CLIENTE).buildAndExpand(variables).toUri();
 
+		AlterarClienteDTO alterarClienteDTO = new AlterarClienteDTOBuilder()
+				.dataNascimento(LocalDate.now().minusYears(18)).estadoCivil(EstadoCivil.Casado).build();
+
 		MvcResult response = mockMVC
-				.perform(patch(alterarCliente).contentType(MediaType.APPLICATION_JSON_UTF8).content(
-						mapper.writeValueAsString(new AlterarClienteRequest(new AlterarClienteDTOBuilder().build()))))
+				.perform(patch(alterarCliente).contentType(MediaType.APPLICATION_JSON_UTF8)
+						.content(mapper.writeValueAsString(new AlterarClienteRequest(alterarClienteDTO))))
 				.andDo(print()).andReturn();
 
 		assertThat("Deve alterar cliente", HttpStatus.valueOf(response.getResponse().getStatus()),

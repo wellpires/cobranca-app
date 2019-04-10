@@ -1,16 +1,18 @@
-package br.com.cobrancamensal.dto;
+package br.com.cobrancamensal.response;
 
 import java.util.List;
 
-public class PlanosDTO {
+import br.com.cobrancamensal.dto.PlanoDTO;
+
+public class PlanosResponse {
 
 	private List<PlanoDTO> planos;
 
-	public PlanosDTO(List<PlanoDTO> planos) {
+	public PlanosResponse(List<PlanoDTO> planos) {
 		this.planos = planos;
 	}
 
-	public PlanosDTO() {
+	public PlanosResponse() {
 	}
 
 	public List<PlanoDTO> getPlanos() {

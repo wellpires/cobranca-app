@@ -4,9 +4,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,9 +31,9 @@ import br.com.cobrancamensal.builder.NovoPlanoDTOBuilder;
 import br.com.cobrancamensal.builder.PlanoDTOBuilder;
 import br.com.cobrancamensal.controller.advice.CobrancaControllerAdvice;
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
-import br.com.cobrancamensal.dto.PlanosDTO;
 import br.com.cobrancamensal.exception.PlanoDuplicadoException;
 import br.com.cobrancamensal.response.ErrorResponse;
+import br.com.cobrancamensal.response.PlanosResponse;
 import br.com.cobrancamensal.service.PlanoService;
 import br.com.cobrancamensal.util.Constantes;
 
@@ -160,7 +160,7 @@ public class PlanoControllerTest {
 				.thenReturn(new PlanoDTOBuilder().quantidadeItens(quantidadeItens).buildList());
 
 		MvcResult response = this.mockMVC.perform(get(PATH_APP)).andDo(print()).andReturn();
-		PlanosDTO planosDTO = mapper.readValue(response.getResponse().getContentAsString(), PlanosDTO.class);
+		PlanosResponse planosDTO = mapper.readValue(response.getResponse().getContentAsString(), PlanosResponse.class);
 
 		assertNotNull("Deve retornar os planos", planosDTO.getPlanos());
 		assertThat("Deve retornar os planos", planosDTO.getPlanos(), hasSize(quantidadeItens));
