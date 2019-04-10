@@ -8,6 +8,6 @@ import br.com.cobrancamensal.model.Plano;
 
 public interface PlanoRepository extends CrudRepository<Plano, String> {
 
-	Optional<Plano> findByNomePlano(String nomePlano);
+	Optional<Plano> findByNomePlanoIgnoreCase(String nomePlano);
 
 }

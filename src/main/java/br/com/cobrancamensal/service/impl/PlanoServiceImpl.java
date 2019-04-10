@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.cobrancamensal.builder.DetalhePlanoDTOBuilder;
 import br.com.cobrancamensal.builder.PlanoBuilder;
+import br.com.cobrancamensal.dto.AlterarPlanoDTO;
 import br.com.cobrancamensal.dto.DetalhePlanoDTO;
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
 import br.com.cobrancamensal.dto.PlanoDTO;
@@ -46,8 +47,25 @@ public class PlanoServiceImpl implements PlanoService {
 
 	@Override
 	public DetalhePlanoDTO buscarPlano(String nomePlano) throws PlanoNotFoundException {
-		Plano plano = planoRepository.findByNomePlano(nomePlano).orElseThrow(PlanoNotFoundException::new);
+		Plano plano = buscarClientePorNomeCliente(nomePlano);
 		return new DetalhePlanoDTOBuilder().nome(plano.getNomePlano()).valor(plano.getValor()).build();
+	}
+
+	@Override
+	public void removerPlano(String nomePlano) throws PlanoNotFoundException {
+		Plano plano = buscarClientePorNomeCliente(nomePlano);
+		planoRepository.delete(plano);
+	}
+
+	@Override
+	public void alterarPlano(String nomePlano, AlterarPlanoDTO alterarPlanoDTO) throws PlanoNotFoundException {
+		Plano plano = buscarClientePorNomeCliente(nomePlano);
+		plano.setValor(alterarPlanoDTO.getValor());
+		planoRepository.save(plano);
+	}
+
+	private Plano buscarClientePorNomeCliente(String nomePlano) throws PlanoNotFoundException {
+		return planoRepository.findByNomePlanoIgnoreCase(nomePlano).orElseThrow(PlanoNotFoundException::new);
 	}
 
 }

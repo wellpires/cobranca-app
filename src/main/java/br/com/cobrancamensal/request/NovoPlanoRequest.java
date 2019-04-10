@@ -15,6 +15,13 @@ public class NovoPlanoRequest {
 	@Valid
 	private NovoPlanoDTO novoPlanoDTO;
 
+	public NovoPlanoRequest(NovoPlanoDTO novoPlanoDTO) {
+		this.novoPlanoDTO = novoPlanoDTO;
+	}
+
+	public NovoPlanoRequest() {
+	}
+
 	public NovoPlanoDTO getNovoPlanoDTO() {
 		return novoPlanoDTO;
 	}

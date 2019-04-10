@@ -1,9 +1,11 @@
 package br.com.cobrancamensal.controller;
 
+import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -222,22 +224,15 @@ public class ClienteControllerTest {
 				DetalheClienteResponse.class);
 
 		assertNotNull("Deve retornar o detalhe do cliente", detalheClienteResponse);
-		assertThat("Deve retornar o nome do cliente", detalheClienteResponse.getDetalheClienteDTO().getNome(),
-				equalTo(detalheClienteDTO.getNome()));
-		assertThat("Deve retornar o CPF", detalheClienteResponse.getDetalheClienteDTO().getCpf(),
-				equalTo(detalheClienteDTO.getCpf()));
-		assertThat("Deve retornar a data de nascimento",
-				detalheClienteResponse.getDetalheClienteDTO().getDataNascimento(),
-				equalTo(detalheClienteDTO.getDataNascimento()));
-		assertThat("Deve retornar o Estado Civil", detalheClienteResponse.getDetalheClienteDTO().getEstadoCivil(),
-				equalTo(detalheClienteDTO.getEstadoCivil()));
+		assertTrue("Deve retornar o detalhe do cliente",
+				reflectionEquals(detalheClienteResponse.getDetalheClienteDTO(), detalheClienteDTO, false));
 
 	}
 
 	@Test
 	public void naoDeveBuscarClientePoisOClienteNaoFoiEncontrado() throws Exception {
 
-		doThrow(ClienteNotFoundException.class).when(clienteService).buscarCliente(Mockito.anyLong());
+		doThrow(new ClienteNotFoundException()).when(clienteService).buscarCliente(Mockito.anyLong());
 
 		HashMap<String, Object> variables = new HashMap<String, Object>();
 		variables.put("cpf", 58190950061L);
@@ -245,6 +240,10 @@ public class ClienteControllerTest {
 
 		MvcResult response = mockMVC.perform(get(buscarCliente)).andDo(print()).andReturn();
 
+		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
+				ErrorResponse.class);
+		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
+				equalTo(new ClienteNotFoundException().getMessage()));
 		assertThat("Não deve buscar o cliente pois não foi encontrado",
 				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.NOT_FOUND));
 
@@ -266,13 +265,17 @@ public class ClienteControllerTest {
 	@Test
 	public void naoDeveRemoverClientePoisOClienteNaoFoiEncontrado() throws Exception {
 
-		doThrow(ClienteNotFoundException.class).when(clienteService).removerCliente(Mockito.anyLong());
+		doThrow(new ClienteNotFoundException()).when(clienteService).removerCliente(Mockito.anyLong());
 
 		HashMap<String, Object> variables = new HashMap<String, Object>();
 		variables.put("cpf", 58190950061L);
 		URI removerCliente = UriComponentsBuilder.fromPath(DELETE_REMOVER_CLIENTE).buildAndExpand(variables).toUri();
 		MvcResult response = mockMVC.perform(delete(removerCliente)).andDo(print()).andReturn();
 
+		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
+				ErrorResponse.class);
+		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
+				equalTo(new ClienteNotFoundException().getMessage()));
 		assertThat("Não deve remover cliente pois o cliente não foi encontrado",
 				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.NOT_FOUND));
 
@@ -304,13 +307,17 @@ public class ClienteControllerTest {
 		variables.put("cpf", 58190950061L);
 		URI alterarCliente = UriComponentsBuilder.fromPath(PATCH_ALTERAR_CLIENTE).buildAndExpand(variables).toUri();
 
-		AlterarClienteDTO alterarClienteDTO = new AlterarClienteDTOBuilder().dataNascimento(LocalDate.now())
-				.estadoCivil("TESTE").build();
+		AlterarClienteDTO alterarClienteDTO = new AlterarClienteDTOBuilder()
+				.dataNascimento(LocalDate.now().minusYears(18)).estadoCivil("TESTE").build();
 		MvcResult response = mockMVC
 				.perform(patch(alterarCliente).contentType(MediaType.APPLICATION_JSON_UTF8)
 						.content(mapper.writeValueAsString(new AlterarClienteRequest(alterarClienteDTO))))
 				.andDo(print()).andReturn();
 
+		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
+				ErrorResponse.class);
+		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
+				equalTo(Constantes.CAMPO_ESTADO_CIVIL_INVALIDO));
 		assertThat("Não deve alterar cliente pois o estado civil está incorreto",
 				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.BAD_REQUEST));
 
@@ -329,6 +336,10 @@ public class ClienteControllerTest {
 						.content(mapper.writeValueAsString(new AlterarClienteRequest(alterarClienteDTO))))
 				.andDo(print()).andReturn();
 
+		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
+				ErrorResponse.class);
+		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
+				equalTo(Constantes.CLIENTE_OBRIGATORIO));
 		assertThat("Não deve alterar cliente pois o cliente está nulo",
 				HttpStatus.valueOf(response.getResponse().getStatus()), equalTo(HttpStatus.BAD_REQUEST));
 
@@ -337,7 +348,7 @@ public class ClienteControllerTest {
 	@Test
 	public void naoDeveAlterarClientePoisOClienteNaoFoiEncontrado() throws Exception {
 
-		doThrow(ClienteNotFoundException.class).when(clienteService).alterarCliente(Mockito.anyLong(),
+		doThrow(new ClienteNotFoundException()).when(clienteService).alterarCliente(Mockito.anyLong(),
 				any(AlterarClienteDTO.class));
 
 		HashMap<String, Object> variables = new HashMap<String, Object>();
@@ -352,6 +363,10 @@ public class ClienteControllerTest {
 						.content(mapper.writeValueAsString(new AlterarClienteRequest(alterarClienteDTO))))
 				.andDo(print()).andReturn();
 
+		ErrorResponse errorResponse = mapper.readValue(response.getResponse().getContentAsString(),
+				ErrorResponse.class);
+		assertThat("Deve retornar a mensagem de erro", errorResponse.getMessage(),
+				equalTo(new ClienteNotFoundException().getMessage()));
 		assertThat("Deve alterar cliente", HttpStatus.valueOf(response.getResponse().getStatus()),
 				equalTo(HttpStatus.NOT_FOUND));
 

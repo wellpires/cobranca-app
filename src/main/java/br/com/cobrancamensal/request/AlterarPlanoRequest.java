@@ -15,6 +15,13 @@ public class AlterarPlanoRequest {
 	@Valid
 	private AlterarPlanoDTO alterarPlanoDTO;
 
+	public AlterarPlanoRequest(AlterarPlanoDTO alterarPlanoDTO) {
+		this.alterarPlanoDTO = alterarPlanoDTO;
+	}
+
+	public AlterarPlanoRequest() {
+	}
+
 	public AlterarPlanoDTO getAlterarPlanoDTO() {
 		return alterarPlanoDTO;
 	}

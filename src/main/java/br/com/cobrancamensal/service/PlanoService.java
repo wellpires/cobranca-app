@@ -2,6 +2,7 @@ package br.com.cobrancamensal.service;
 
 import java.util.List;
 
+import br.com.cobrancamensal.dto.AlterarPlanoDTO;
 import br.com.cobrancamensal.dto.DetalhePlanoDTO;
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
 import br.com.cobrancamensal.dto.PlanoDTO;
@@ -15,5 +16,9 @@ public interface PlanoService {
 	List<PlanoDTO> listarPlanos();
 
 	DetalhePlanoDTO buscarPlano(String nomePlano) throws PlanoNotFoundException;
+
+	void removerPlano(String nomePlano) throws PlanoNotFoundException;
+
+	void alterarPlano(String nomePlano, AlterarPlanoDTO alterarPlanoDTO) throws PlanoNotFoundException;
 
 }

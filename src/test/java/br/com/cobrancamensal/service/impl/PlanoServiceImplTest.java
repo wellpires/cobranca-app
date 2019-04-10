@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import br.com.cobrancamensal.builder.AlterarPlanoDTOBuilder;
 import br.com.cobrancamensal.builder.NovoPlanoDTOBuilder;
 import br.com.cobrancamensal.builder.PlanoBuilder;
 import br.com.cobrancamensal.dto.DetalhePlanoDTO;
@@ -93,7 +94,7 @@ public class PlanoServiceImplTest {
 	public void deveBuscarPlano() throws PlanoNotFoundException {
 
 		Plano plano = new PlanoBuilder().nomePlano("plano teste").build();
-		when(planoRepository.findByNomePlano(anyString())).thenReturn(Optional.ofNullable(plano));
+		when(planoRepository.findByNomePlanoIgnoreCase(anyString())).thenReturn(Optional.ofNullable(plano));
 
 		DetalhePlanoDTO detalhePlanoDTO = planoService.buscarPlano("Plano teste");
 
@@ -106,9 +107,57 @@ public class PlanoServiceImplTest {
 	public void naoDeveBuscarPlanoPoisNaoFoiEncontrado() throws PlanoNotFoundException {
 
 		Plano plano = null;
-		when(planoRepository.findByNomePlano(anyString())).thenReturn(Optional.ofNullable(plano));
+		when(planoRepository.findByNomePlanoIgnoreCase(anyString())).thenReturn(Optional.ofNullable(plano));
 
 		planoService.buscarPlano("Plano teste");
+
+	}
+
+	@Test
+	public void deveRemoverPlano() throws PlanoNotFoundException {
+
+		Plano plano = new PlanoBuilder().build();
+		when(planoRepository.findByNomePlanoIgnoreCase(anyString())).thenReturn(Optional.ofNullable(plano));
+
+		planoService.removerPlano("plano teste");
+
+		verify(planoRepository, times(1)).delete(any(Plano.class));
+
+	}
+
+	@Test(expected = PlanoNotFoundException.class)
+	public void naoDeveRemoverPlanoPoisPlanoNaoFoiEncontrado() throws PlanoNotFoundException {
+
+		Plano plano = null;
+		when(planoRepository.findByNomePlanoIgnoreCase(anyString())).thenReturn(Optional.ofNullable(plano));
+
+		planoService.removerPlano("plano teste");
+
+		verify(planoRepository, never()).delete(any(Plano.class));
+
+	}
+
+	@Test
+	public void deveAlterarPlano() throws PlanoNotFoundException {
+
+		Plano plano = new PlanoBuilder().build();
+		when(planoRepository.findByNomePlanoIgnoreCase(anyString())).thenReturn(Optional.ofNullable(plano));
+
+		planoService.alterarPlano("plano teste", new AlterarPlanoDTOBuilder().valor(29.99).build());
+
+		verify(planoRepository, times(1)).save(any(Plano.class));
+
+	}
+
+	@Test(expected = PlanoNotFoundException.class)
+	public void naoDeveAlterarPlanoPoisPlanoNaoFoiEncontrado() throws PlanoNotFoundException {
+
+		Plano plano = null;
+		when(planoRepository.findByNomePlanoIgnoreCase(anyString())).thenReturn(Optional.ofNullable(plano));
+
+		planoService.alterarPlano("plano teste", new AlterarPlanoDTOBuilder().valor(29.99).build());
+
+		verify(planoRepository, never()).save(any(Plano.class));
 
 	}
 
