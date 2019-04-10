@@ -27,6 +27,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import br.com.cobrancamensal.builder.NovoPlanoDTOBuilder;
 import br.com.cobrancamensal.builder.PlanoBuilder;
+import br.com.cobrancamensal.dto.DetalhePlanoDTO;
 import br.com.cobrancamensal.dto.PlanoDTO;
 import br.com.cobrancamensal.exception.PlanoDuplicadoException;
 import br.com.cobrancamensal.exception.PlanoNotFoundException;
@@ -94,10 +95,10 @@ public class PlanoServiceImplTest {
 		Plano plano = new PlanoBuilder().nomePlano("plano teste").build();
 		when(planoRepository.findByNomePlano(anyString())).thenReturn(Optional.ofNullable(plano));
 
-		PlanoDTO planoDTO = planoService.buscarPlano("Plano teste");
+		DetalhePlanoDTO detalhePlanoDTO = planoService.buscarPlano("Plano teste");
 
-		assertNotNull("Deve retornar o plano", planoDTO);
-		assertThat("Deve retornar o nome do plano", planoDTO.getNome(), equalTo(plano.getNomePlano()));
+		assertNotNull("Deve retornar o plano", detalhePlanoDTO);
+		assertThat("Deve retornar o nome do plano", detalhePlanoDTO.getNome(), equalTo(plano.getNomePlano()));
 
 	}
 

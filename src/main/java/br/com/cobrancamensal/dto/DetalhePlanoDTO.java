@@ -2,15 +2,15 @@ package br.com.cobrancamensal.dto;
 
 public class DetalhePlanoDTO {
 
-	private String nomePlano;
+	private String nome;
 	private Double valor;
 
-	public String getNomePlano() {
-		return nomePlano;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setNomePlano(String nomePlano) {
-		this.nomePlano = nomePlano;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public Double getValor() {

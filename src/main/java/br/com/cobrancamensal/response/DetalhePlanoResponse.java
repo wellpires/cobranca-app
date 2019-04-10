@@ -9,6 +9,13 @@ public class DetalhePlanoResponse {
 	@JsonProperty("plano")
 	private DetalhePlanoDTO detalhePlanoDTO;
 
+	public DetalhePlanoResponse(DetalhePlanoDTO detalhePlanoDTO) {
+		this.detalhePlanoDTO = detalhePlanoDTO;
+	}
+
+	public DetalhePlanoResponse() {
+	}
+
 	public DetalhePlanoDTO getDetalhePlanoDTO() {
 		return detalhePlanoDTO;
 	}

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.cobrancamensal.dto.DetalheClienteDTO;
-import br.com.cobrancamensal.dto.PlanoDTO;
+import br.com.cobrancamensal.dto.DetalhePlanoDTO;
 import br.com.cobrancamensal.exception.ClienteNotFoundException;
 import br.com.cobrancamensal.exception.ContratoDuplicadoException;
 import br.com.cobrancamensal.exception.PlanoNotFoundException;
@@ -33,11 +33,11 @@ public class ContratoServiceImpl implements ContratoService {
 	public void contratarPlano(Long cpf, String nomePlano)
 			throws ClienteNotFoundException, PlanoNotFoundException, ContratoDuplicadoException {
 		DetalheClienteDTO detalheClienteDTO = clienteService.buscarCliente(cpf);
-		PlanoDTO planoDTO = planoService.buscarPlano(nomePlano);
-		ContratoPK idContrato = new ContratoPK(detalheClienteDTO.getCpf(), planoDTO.getNome());
+		DetalhePlanoDTO detalhePlanoDTO = planoService.buscarPlano(nomePlano);
+		ContratoPK idContrato = new ContratoPK(detalheClienteDTO.getCpf(), detalhePlanoDTO.getNome());
 
 		if (contratoRepository.existsById(idContrato)) {
-			throw new ContratoDuplicadoException(detalheClienteDTO.getCpf(), planoDTO.getNome());
+			throw new ContratoDuplicadoException(detalheClienteDTO.getCpf(), detalhePlanoDTO.getNome());
 		}
 
 		Contrato contrato = new Contrato();

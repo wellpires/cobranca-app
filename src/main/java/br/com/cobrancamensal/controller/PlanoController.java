@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.cobrancamensal.controller.resource.PlanoResource;
+import br.com.cobrancamensal.dto.DetalhePlanoDTO;
 import br.com.cobrancamensal.dto.PlanoDTO;
 import br.com.cobrancamensal.exception.PlanoDuplicadoException;
 import br.com.cobrancamensal.exception.PlanoNotFoundException;
@@ -47,8 +48,8 @@ public class PlanoController implements PlanoResource {
 
 	@Override
 	public ResponseEntity<DetalhePlanoResponse> buscarPlano(String nomePlano) throws PlanoNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		DetalhePlanoDTO detalhePlanoDTO = planoService.buscarPlano(nomePlano);
+		return ResponseEntity.ok(new DetalhePlanoResponse(detalhePlanoDTO));
 	}
 
 	@Override

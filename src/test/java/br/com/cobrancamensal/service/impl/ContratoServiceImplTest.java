@@ -17,9 +17,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import br.com.cobrancamensal.builder.DetalheClienteDTOBuilder;
-import br.com.cobrancamensal.builder.PlanoDTOBuilder;
+import br.com.cobrancamensal.builder.DetalhePlanoDTOBuilder;
 import br.com.cobrancamensal.dto.DetalheClienteDTO;
-import br.com.cobrancamensal.dto.PlanoDTO;
+import br.com.cobrancamensal.dto.DetalhePlanoDTO;
 import br.com.cobrancamensal.exception.ClienteNotFoundException;
 import br.com.cobrancamensal.exception.ContratoDuplicadoException;
 import br.com.cobrancamensal.exception.PlanoNotFoundException;
@@ -78,8 +78,8 @@ public class ContratoServiceImplTest {
 		DetalheClienteDTO clienteDTO = new DetalheClienteDTOBuilder().cpf(12345678901L).build();
 		when(clienteService.buscarCliente(anyLong())).thenReturn(clienteDTO);
 
-		PlanoDTO planoDTO = new PlanoDTOBuilder().nome("plano teste").build();
-		when(planoService.buscarPlano(anyString())).thenReturn(planoDTO);
+		DetalhePlanoDTO detalhePlanoDTO = new DetalhePlanoDTOBuilder().nome("plano teste").valor(12.0).build();
+		when(planoService.buscarPlano(anyString())).thenReturn(detalhePlanoDTO);
 
 		when(contratoRepository.existsById(any(ContratoPK.class))).thenReturn(Boolean.FALSE);
 
@@ -96,8 +96,8 @@ public class ContratoServiceImplTest {
 		DetalheClienteDTO detalheClienteDTO = new DetalheClienteDTOBuilder().cpf(12345678901L).build();
 		when(clienteService.buscarCliente(anyLong())).thenReturn(detalheClienteDTO);
 
-		PlanoDTO planoDTO = new PlanoDTOBuilder().nome("plano teste").build();
-		when(planoService.buscarPlano(anyString())).thenReturn(planoDTO);
+		DetalhePlanoDTO detalhePlanoDTO = new DetalhePlanoDTOBuilder().nome("plano teste").valor(12.0).build();
+		when(planoService.buscarPlano(anyString())).thenReturn(detalhePlanoDTO);
 
 		when(contratoRepository.existsById(any(ContratoPK.class))).thenReturn(Boolean.TRUE);
 

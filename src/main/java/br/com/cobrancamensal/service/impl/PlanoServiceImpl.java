@@ -8,8 +8,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.cobrancamensal.builder.DetalhePlanoDTOBuilder;
 import br.com.cobrancamensal.builder.PlanoBuilder;
-import br.com.cobrancamensal.builder.PlanoDTOBuilder;
+import br.com.cobrancamensal.dto.DetalhePlanoDTO;
 import br.com.cobrancamensal.dto.NovoPlanoDTO;
 import br.com.cobrancamensal.dto.PlanoDTO;
 import br.com.cobrancamensal.exception.PlanoDuplicadoException;
@@ -44,9 +45,9 @@ public class PlanoServiceImpl implements PlanoService {
 	}
 
 	@Override
-	public PlanoDTO buscarPlano(String nomePlano) throws PlanoNotFoundException {
+	public DetalhePlanoDTO buscarPlano(String nomePlano) throws PlanoNotFoundException {
 		Plano plano = planoRepository.findByNomePlano(nomePlano).orElseThrow(PlanoNotFoundException::new);
-		return new PlanoDTOBuilder().nome(plano.getNomePlano()).build();
+		return new DetalhePlanoDTOBuilder().nome(plano.getNomePlano()).valor(plano.getValor()).build();
 	}
 
 }
