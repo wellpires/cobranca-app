@@ -19,10 +19,9 @@ Esta aplicação disponibiliza um serviço REST para disponibilizar recursos de 
 
 # Pré requisitos
 1. Criar o banco de dados com o nome **db_cobranca**
-2. Alterar a propriedade **spring.jpa.hibernate.ddl-auto** no arquivo *application.properties* para **create-drop**
-3. Executar a aplicação cobranca-mensal-app para disponibilizar os serviços de consumo e cadastro dos planos, clientes e contratos.
-4. Java 8
-5. Maven
+2. Executar a aplicação cobranca-mensal-app para disponibilizar os serviços de consumo e cadastro dos planos, clientes e contratos.
+3. Java 8
+4. Maven
 
 # Configurações
 
